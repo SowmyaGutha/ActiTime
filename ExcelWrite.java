@@ -17,7 +17,27 @@ import org.testng.annotations.Test;
 
 import Actitime.LoginPage;
 
-public class ExcelWrite {
+	public static void setExcelFile(String ExcelPath,String SheetName) throws Exception {
+	public static Workbook wb;
+	public static Sheet sh;
+	try{
+	String filePath = "F:/Actitime_POM/Resources/File.xlsx";
+	File file = new File(filePath);
+	if(!file.exists())
+	{
+		file.createNewFile();
+		System.out.println("File Created");
+	}
+	FileInputStream fis = new FileInputStream(filePath);
+	wb = Workbook.getWorkbook(fis);
+	sh = wb.getSheet(SheetName);
+	-------------------	
+	}catch (Exception e) {
+	e.printStackTrace();
+	}
+	}
+
+	public class ExcelWrite {
 
 	@Test
 	public void test_write() {
