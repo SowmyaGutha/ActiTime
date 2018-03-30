@@ -1,11 +1,16 @@
 package Generic;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class GenericMethods {
 
-	public static WebDriver driver;
+	WebDriver driver;
+	public WebDriverWait myWait;
 
 	public WebDriver getDriver() {
 		if (driver == null) {
@@ -15,67 +20,57 @@ public class GenericMethods {
 		}
 		return driver;
 	}
-	public void openBrowser(String Browser) {
-		Browser = GenericMethods.getProperties().getProperty("browser");
-		try {
-			if (Browser.equalsIgnoreCase("firefox")) {
-				System.setProperty("webdriver.gecko.driver", "D:/Actitime/ActitimeProject/geckodriver.exe");
-				driver = new FirefoxDriver();
-				System.out.println("FireFox Browser is Launched");
-			} else if (Browser.equalsIgnoreCase("chrome")) {
-				System.setProperty("webdriver.chrome.driver", ".\\chromedriver.exe");
-				driver = new ChromeDriver();
-				System.out.println("Chrome Browser is Launched");
-			} else if (Browser.equalsIgnoreCase("IE")) {
-				driver = new InternetExplorerDriver();
-				System.out.println("IE Browser is Launched");
-			} else {
-				System.out.println("Issue with Browser");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-	}
-
-	public static Properties getProperties() {
-		InputStream input = BaseClass.class.getClassLoader().getResourceAsStream("xpath.properties");
-		Properties pop = new Properties();
-		try {
-			pop.load(input);
-			return pop;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public void applicationLaunch() {
-		try {
-			driver.manage().window().maximize();
-			driver.get(GenericMethods.getProperties().getProperty("url"));
-			// driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-			Thread.sleep(1000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void browserInitiate(String URL) {
+		driver.manage().window().maximize();
+		driver.get(URL);
 	}
 
 	public void browserClose() {
-		try {
-			driver.close();
-			//driver.quit();
-			System.out.println("Browser is Closed");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		driver.close();
 	}
 
-		public void browserWait() {
+	public void browserWait() {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
+
+	public void webDriverWait() {
+		myWait = new WebDriverWait(driver, 10);
+		myWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("pwd")));
+		driver.findElement(By.id("pwd")).sendKeys("password");
+	}
+
+	public void isEnabledFunction() {
+		WebElement username_textbox = driver.findElement(By.id("username"));
+		if (username_textbox.isEnabled()) {
+			username_textbox.sendKeys("username");
+		}
+	}
+
+	public void isSelectedFunction() {
+		WebElement username_textbox = driver.findElement(By.id("username"));
+		if (username_textbox.isSelected()) {
+			username_textbox.click();
+		}
+	}
+
+	public void wait_Until_Alertbox_Displayed() {
+		if (myWait.until(ExpectedConditions.alertIsPresent()) != null) {
+			System.out.println("Alert Present");
+		}
+	}
+
+	public void element_ToBe_Clickable() {
+		WebElement username_textbox = driver.findElement(By.id("username"));
+		myWait.until(ExpectedConditions.elementToBeClickable(username_textbox));
+	}
+
+	public void frameToBeAvailableAndSwitchToIt() {
+		myWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("Frameid")));
+	}
+
 }
